@@ -89,6 +89,9 @@ We’ll build a production-grade feature, not a toy.
   - role-based access control (admin, member)
   - audit logging of actions
   ~~~
+<video controls width="100%">
+<source src="assets/Area.mp4" type="video/mp4">
+</video>
 
 
 ![Video Title](assets/Area.mp4)
