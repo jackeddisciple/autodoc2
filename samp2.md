@@ -158,6 +158,8 @@ This is handled by the orchestrator (**Blackbox**).
 
 No manual glue code. The feature is applied as a coherent system change , not stitched layer by layer.
 
+Vid 2
+https://drive.google.com/file/d/1J_ZkGQNHRj6V8Gm3ow99mDRwimNO0bl3/view?usp=sharing
 
 
 > **Tip** -
@@ -182,7 +184,6 @@ Invite lifecycle succeeds, RBAC is enforced (403 vs 200), and all actions are ca
 
 New routes, RBAC middleware, and audit logging are wired into the system, reflecting the feature across all layers.
 
- ![App Screenshot](assets/img2.jpeg)
 
 
 ## Refinement Loop
