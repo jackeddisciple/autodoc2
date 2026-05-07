@@ -1,0 +1,1041 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --black:#0c0a08;
+  --bg1:#100d0a;
+  --bg2:#161210;
+  --bg3:#1c1714;
+  --bg4:#221c18;
+  --border:#251e18;
+  --border2:#332820;
+  --border3:#443322;
+  --orange:#FF6B00;
+  --orange2:#FF8C35;
+  --orange-dim:rgba(255,107,0,0.12);
+  --orange-glow:rgba(255,107,0,0.06);
+  --text:#ffffff;
+  --text2:#a09080;
+  --text3:#665040;
+  --green:#22c55e;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',sans-serif;
+}
+
+body{background:var(--black);color:var(--text);font-family:var(--sans);min-height:100vh}
+
+.wrap{max-width:920px;margin:0 auto;padding:52px 24px 80px;position:relative;z-index:1}
+
+/* Hero */
+.eyebrow{font-family:var(--mono);font-size:10px;color:var(--orange);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:3px;height:3px;border-radius:50%;background:var(--orange)}
+
+.hero-title{font-family:var(--sans);font-size:clamp(28px,4.5vw,48px);font-weight:700;line-height:1.08;letter-spacing:-0.04em;margin-bottom:14px;color:#fff}
+.hero-sub{font-size:14px;color:var(--text2);line-height:1.65;max-width:520px;margin-bottom:44px;font-weight:400}
+.hero-sub code{font-family:var(--mono);font-size:12px;color:var(--orange);background:var(--orange-dim);padding:2px 7px;border-radius:3px}
+
+/* Terminal */
+.terminal{background:var(--bg1);border:1px solid var(--border2);border-radius:6px;overflow:hidden;margin-bottom:16px;transition:border-color 0.2s}
+.terminal:focus-within{border-color:var(--orange)}
+.term-bar{background:var(--bg2);padding:9px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--border)}
+.dot{width:9px;height:9px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#ffbd2e}.dot.g{background:#28ca41}
+.term-path{font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:auto;letter-spacing:0.06em}
+.term-body{padding:18px 20px}
+.term-prefix{font-family:var(--mono);font-size:11px;color:var(--orange);margin-bottom:5px;letter-spacing:0.04em}
+#prompt-input{width:100%;background:transparent;border:none;outline:none;font-family:var(--mono);font-size:12px;color:var(--text);resize:none;line-height:1.75;min-height:110px;caret-color:var(--orange)}
+
+/* Analyze button */
+.analyze-btn{width:100%;padding:13px 24px;background:#ffffff;border:none;border-radius:2px;color:#000000;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;position:relative;overflow:hidden;transition:background 0.08s linear}
+.analyze-btn:hover{background:#e8e8e8;box-shadow:inset 2px 0 0 rgba(0,0,0,0.25)}
+.analyze-btn:active{background:#d0d0d0;transform:scale(0.995)}
+.analyze-btn:disabled{background:#1a1a1a;color:#3a3a3a;cursor:not-allowed}
+.analyze-btn::before{content:'';position:absolute;inset:0;opacity:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 5px,rgba(0,0,0,0.04) 5px,rgba(0,0,0,0.04) 6px),repeating-linear-gradient(90deg,transparent,transparent 5px,rgba(0,0,0,0.04) 5px,rgba(0,0,0,0.04) 6px);transition:opacity 0.12s linear;pointer-events:none}
+.analyze-btn:hover::before{opacity:1}
+.btn-arrow{font-size:14px}
+
+/* Status */
+.status-row{min-height:28px;margin:20px 0 16px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.3s}
+.status-row.show{opacity:1}
+.status-dot{width:5px;height:5px;border-radius:50%;background:var(--orange);flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.15}}
+.status-dot.pulse{animation:blink 1s ease-in-out infinite}
+.status-text{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:0.06em}
+
+/* Section label */
+.sec-label{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Capability cards */
+.cap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:24px}
+.cap-card{background:var(--bg1);border:1px solid var(--border);border-radius:5px;padding:14px 16px;opacity:0;transform:translateY(6px);transition:opacity 0.4s,transform 0.4s,border-color 0.2s}
+.cap-card.show{opacity:1;transform:translateY(0)}
+.cap-card:hover{border-color:var(--border3)}
+.cap-top{display:flex;align-items:center;gap:0;margin-bottom:12px}
+.cap-num{font-family:var(--mono);font-size:10px;color:var(--text3);width:22px;flex-shrink:0;letter-spacing:0.04em}
+.cap-name{font-family:var(--mono);font-size:11px;color:var(--text);font-weight:500;letter-spacing:0.04em;flex:1}
+.cap-pct{font-family:var(--mono);font-size:11px;color:var(--green);margin-left:auto}
+.meter-track{height:1px;background:var(--border2);border-radius:1px;overflow:hidden}
+.meter-fill{height:100%;background:var(--green);width:0;transition:width 1.4s cubic-bezier(0.16,1,0.3,1)}
+
+/* Graph */
+.graph-wrap{margin-bottom:24px}
+canvas#graph{width:100%;border-radius:5px;border:1px solid var(--border2);background:#100d0a;display:block;cursor:crosshair}
+
+/* Tooltip */
+#tooltip{position:fixed;background:var(--bg2);border:1px solid var(--border2);border-radius:5px;padding:12px 14px;max-width:230px;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:999;font-size:12px}
+.tip-header{font-family:var(--mono);font-size:9px;color:var(--orange);margin-bottom:7px;text-transform:uppercase;letter-spacing:0.12em}
+.tip-body{color:var(--text2);line-height:1.55;font-size:12px;font-family:var(--sans)}
+
+/* Exec plan */
+.exec-panel{background:var(--bg1);border:1px solid var(--border);border-radius:5px;padding:20px 22px;margin-bottom:20px;opacity:0;transform:translateY(8px);transition:opacity 0.45s,transform 0.45s}
+.exec-panel.show{opacity:1;transform:translateY(0)}
+.exec-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);opacity:0;transform:translateX(-5px);transition:opacity 0.35s,transform 0.35s}
+.exec-row:last-child{border-bottom:none}
+.exec-row.show{opacity:1;transform:translateX(0)}
+.exec-check{font-family:var(--mono);font-size:12px;color:var(--green);width:18px;flex-shrink:0}
+.exec-text{font-family:var(--mono);font-size:11px;color:var(--text2);letter-spacing:0.04em}
+
+/* CTA grid */
+.cta-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.cta-btn{padding:14px 22px;border-radius:2px;border:1px solid rgba(255,255,255,0.1);background:rgba(8,6,4,0.98);color:rgba(255,255,255,0.55);font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(5px);transition:color 0.08s linear,border-color 0.08s linear,opacity 0.4s,transform 0.4s;position:relative;overflow:hidden}
+.cta-btn.show{opacity:1;transform:translateY(0)}
+.cta-btn::before{content:'';position:absolute;inset:0;opacity:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 5px,rgba(255,255,255,0.025) 5px,rgba(255,255,255,0.025) 6px),repeating-linear-gradient(90deg,transparent,transparent 5px,rgba(255,255,255,0.025) 5px,rgba(255,255,255,0.025) 6px);transition:opacity 0.12s linear;pointer-events:none}
+.cta-btn:hover::before{opacity:1}
+.cta-btn:hover{color:rgba(255,255,255,0.9);border-color:rgba(255,255,255,0.22);box-shadow:inset 1px 0 0 rgba(255,255,255,0.18)}
+.cta-btn.primary:hover{box-shadow:inset 1px 0 0 rgba(0,0,0,0.15)}
+.cta-btn:active{transform:scale(0.995)}
+.cta-btn.primary{background:#ffffff;color:#000000;border:none}
+.cta-btn.primary::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 5px,rgba(0,0,0,0.04) 5px,rgba(0,0,0,0.04) 6px),repeating-linear-gradient(90deg,transparent,transparent 5px,rgba(0,0,0,0.04) 5px,rgba(0,0,0,0.04) 6px)}
+.cta-btn.primary:hover{background:#e8e8e8;color:#000000}
+
+/* Bg grid */
+canvas#bg{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:1}
+</style>
+
+<canvas id="bg"></canvas>
+<div class="wrap">
+  <div class="eyebrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="opacity:0.6"><circle cx="5" cy="5" r="4" stroke="#FF6B00" stroke-width="1"/><circle cx="5" cy="5" r="1.5" fill="#FF6B00"/></svg>Live Capability Routing</div>
+  <h1 class="hero-title">Try Live Capability<br>Routing</h1>
+  <p class="hero-sub">Describe a system outcome. Watch <code>/auto</code> decompose intent, assign ownership, and prepare execution across agents.</p>
+
+  <div class="sec-label" style="margin-bottom:12px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1" opacity="0.4"><rect x="1" y="2.5" width="8" height="5" rx="1"/><path d="M3 5h4M3 6.5h2"/></svg>Input</div>
+  <div class="terminal">
+    <div class="term-bar">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <span class="term-path">orchestrator.sh — /auto</span>
+    </div>
+    <div class="term-body">
+      <div class="term-prefix">$ /auto &gt;</div>
+      <textarea id="prompt-input" spellcheck="false">build a realtime moderation system with:
+
+• websocket event streaming
+• unread persistence
+• RBAC admin controls
+• audit logging</textarea>
+    </div>
+  </div>
+
+  <button class="analyze-btn" id="analyzeBtn" onclick="runAnalysis()">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Analyze System
+  </button>
+
+  <div class="status-row" id="statusRow">
+    <div class="status-dot" id="statusDot"></div>
+    <span class="status-text" id="statusText"></span>
+  </div>
+
+  <div id="capSection" style="display:none">
+    <div class="sec-label"><svg width="10" height="10" viewBox="0 0 10 10" fill="white" opacity="0.4"><rect x="1" y="1" width="3.5" height="3.5" rx="0.5"/><rect x="5.5" y="1" width="3.5" height="3.5" rx="0.5"/><rect x="1" y="5.5" width="3.5" height="3.5" rx="0.5"/><rect x="5.5" y="5.5" width="3.5" height="3.5" rx="0.5"/></svg>Capability extraction</div>
+    <div class="cap-grid" id="capGrid"></div>
+  </div>
+
+  <div id="graphSection" style="display:none">
+    <div class="sec-label"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1" opacity="0.4"><circle cx="2" cy="5" r="1.5"/><circle cx="8" cy="2" r="1.5"/><circle cx="8" cy="8" r="1.5"/><path d="M3.5 5 L6.5 2M3.5 5 L6.5 8"/></svg>Orchestration graph</div>
+    <canvas id="graph" height="420"></canvas>
+  </div>
+
+  <div class="exec-panel" id="execPanel">
+    <div class="sec-label" style="margin-bottom:12px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1" opacity="0.4"><rect x="1" y="1" width="8" height="8" rx="1"/><path d="M3 5l1.5 1.5L7 3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Execution plan</div>
+    <div id="execItems"></div>
+  </div>
+
+  <div class="cta-grid" id="ctaGrid"></div>
+</div>
+
+<div id="tooltip">
+  <div class="tip-header" id="tipLabel"></div>
+  <div class="tip-body" id="tipReason"></div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────
+const CAPS=[
+  {num:'01',name:'WEBSOCKET STREAMING',pct:98},
+  {num:'02',name:'PERSISTENCE LAYER',pct:95},
+  {num:'03',name:'RBAC ENFORCEMENT',pct:97},
+  {num:'04',name:'AUDIT LOGGING',pct:93},
+];
+const AGENTS=[
+  {id:'claude',label:'CLAUDE CODE',sub:'UI + interaction systems',x:0,y:0,color:'#FF6B00',active:false,caps:[],phase:0},
+  {id:'codex',label:'CODEX',sub:'APIs + middleware + infra',x:0,y:0,color:'#FF8C35',active:false,caps:[],phase:1.5},
+  {id:'gemini',label:'GEMINI',sub:'Data + persistence',x:0,y:0,color:'#cc5500',active:false,caps:[],phase:3},
+  {id:'blackbox',label:'BLACKBOX',sub:'Cross-system orchestration',x:0,y:0,color:'#FF6B00',active:false,caps:[],phase:4.5},
+];
+const CNODES=[
+  {id:'ws',label:'WEBSOCKET',x:0,y:0,assigned:false},
+  {id:'rbac',label:'RBAC',x:0,y:0,assigned:false},
+  {id:'persist',label:'PERSISTENCE',x:0,y:0,assigned:false},
+  {id:'audit',label:'AUDIT LOG',x:0,y:0,assigned:false},
+  {id:'notif',label:'NOTIF UI',x:0,y:0,assigned:false},
+  {id:'integ',label:'INTEGRATION',x:0,y:0,assigned:false},
+];
+// Track cap node reveal timing
+const visibleCaps=new Set();
+
+const ROUTES=[
+  {capId:'ws',agentId:'codex',label:'WHY CODEX?',why:'Optimized for middleware boundaries, APIs, and websocket infrastructure — native event-loop familiarity.'},
+  {capId:'rbac',agentId:'codex',label:'WHY CODEX?',why:'RBAC maps directly to API middleware patterns — permission checks belong at the boundary layer.'},
+  {capId:'persist',agentId:'gemini',label:'WHY GEMINI?',why:'Best suited for persistence consistency and schema coordination across distributed state.'},
+  {capId:'notif',agentId:'claude',label:'WHY CLAUDE?',why:'UI and interaction systems — notification composition requires deep UX context awareness.'},
+  {capId:'integ',agentId:'blackbox',label:'WHY BLACKBOX?',why:'Cross-system orchestration — integration boundaries need holistic system knowledge.'},
+  {capId:'audit',agentId:'gemini',label:'WHY GEMINI?',why:'Audit logging benefits from Gemini\'s data pipeline and schema management strengths.'},
+];
+const EXEC_ITEMS=['Capability graph resolved','Agent ownership assigned','Integration boundaries established','Execution sequence prepared'];
+const CTAS=[
+  {label:'Continue in Terminal',icon:'⌨',primary:true},
+  {label:'Export Execution Plan',icon:'↓',primary:false},
+];
+
+// ── BG GRID ──────────────────────────────────────────────────
+const bgC=document.getElementById('bg');
+const bx=bgC.getContext('2d');
+function drawBg(){
+  bgC.width=window.innerWidth;bgC.height=window.innerHeight;
+  bx.clearRect(0,0,bgC.width,bgC.height);
+  const s=40;
+  bx.strokeStyle='rgba(255,90,0,0.055)';bx.lineWidth=0.5;
+  for(let x=0;x<bgC.width;x+=s){bx.beginPath();bx.moveTo(x,0);bx.lineTo(x,bgC.height);bx.stroke();}
+  for(let y=0;y<bgC.height;y+=s){bx.beginPath();bx.moveTo(0,y);bx.lineTo(bgC.width,y);bx.stroke();}
+  // Corner accents
+  bx.strokeStyle='rgba(255,107,0,0.15)';bx.lineWidth=1;
+  [[0,0],[bgC.width,0],[0,bgC.height],[bgC.width,bgC.height]].forEach(([cx,cy])=>{
+    const dx=cx===0?1:-1,dy=cy===0?1:-1;
+    bx.beginPath();bx.moveTo(cx,cy);bx.lineTo(cx+dx*24,cy);bx.stroke();
+    bx.beginPath();bx.moveTo(cx,cy);bx.lineTo(cx,cy+dy*24);bx.stroke();
+  });
+}
+drawBg();window.addEventListener('resize',drawBg);
+
+// ── GRAPH ────────────────────────────────────────────────────
+const gc=document.getElementById('graph');
+const ctx=gc.getContext('2d');
+let GW=0,GH=420,edges=[],particles=[],hoveredEdge=null,rafId=null;
+let hoveredAgent=null,hoveredCap=null;
+
+// System identity colors — muted, restrained
+const SYSTEM_COLORS={
+  claude:{base:'rgba(240,235,220,0.55)',dim:'rgba(240,235,220,0.15)',glow:'rgba(240,235,220,0.06)'},
+  codex:{base:'rgba(140,165,195,0.55)',dim:'rgba(140,165,195,0.15)',glow:'rgba(140,165,195,0.05)'},
+  gemini:{base:'rgba(100,180,185,0.50)',dim:'rgba(100,180,185,0.12)',glow:'rgba(100,180,185,0.05)'},
+  blackbox:{base:'rgba(220,140,50,0.65)',dim:'rgba(220,140,50,0.18)',glow:'rgba(220,140,50,0.07)'},
+};
+
+// Asymmetric layout offsets per agent — breaks the rigid symmetry
+const AGENT_OFFSETS=[
+  {dx:0,  dy:0  },
+  {dx:-8, dy:0  },
+  {dx:6,  dy:0  },
+  {dx:-4, dy:0  },
+];
+// Asymmetric cap offsets
+const CAP_OFFSETS=[
+  {dx:0,  dy:0  },
+  {dx:12, dy:0  },
+  {dx:-6, dy:0  },
+  {dx:8,  dy:0  },
+  {dx:-10,dy:0  },
+  {dx:4,  dy:0  },
+];
+
+// Bezier control-point tension per route — irregular routing depth
+const ROUTE_TENSION=[
+  {c1x:0.38,c1y:0.08, c2x:0.62,c2y:-0.08},
+  {c1x:0.42,c1y:0,    c2x:0.58,c2y:0    },
+  {c1x:0.35,c1y:0.12, c2x:0.65,c2y:0.04},
+  {c1x:0.44,c1y:-0.06,c2x:0.56,c2y:0.06},
+  {c1x:0.40,c1y:0.10, c2x:0.60,c2y:-0.04},
+  {c1x:0.36,c1y:-0.08,c2x:0.64,c2y:0.08},
+];
+
+function layoutGraph(){
+  const w=gc.offsetWidth||800;
+  gc.width=w*devicePixelRatio;gc.height=GH*devicePixelRatio;
+  ctx.scale(devicePixelRatio,devicePixelRatio);
+  GW=w;
+  // Agents — left column, uneven spacing
+  const agentYPositions=[0.18,0.40,0.62,0.82];
+  AGENTS.forEach((a,i)=>{
+    const off=AGENT_OFFSETS[i]||{dx:0,dy:0};
+    a.x=102+off.dx;
+    a.y=GH*agentYPositions[i]+off.dy;
+  });
+  // Caps — right column, irregular spacing
+  const capYPositions=[0.10,0.26,0.42,0.57,0.73,0.89];
+  CNODES.forEach((c,i)=>{
+    const off=CAP_OFFSETS[i]||{dx:0,dy:0};
+    c.x=w-108+off.dx;
+    c.y=GH*capYPositions[i]+off.dy;
+  });
+}
+
+function rrect(c,x,y,w,h,r){
+  c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.arcTo(x+w,y,x+w,y+r,r);
+  c.lineTo(x+w,y+h-r);c.arcTo(x+w,y+h,x+w-r,y+h,r);c.lineTo(x+r,y+h);
+  c.arcTo(x,y+h,x,y+h-r,r);c.lineTo(x,y+r);c.arcTo(x,y,x+r,y,r);c.closePath();
+}
+
+// Cubic bezier with custom control points
+function bezPtCustom(x1,y1,x2,y2,tension,t){
+  const dx=x2-x1,dy=y2-y1;
+  const cx1=x1+dx*tension.c1x;
+  const cy1=y1+dy*tension.c1y;
+  const cx2=x1+dx*tension.c2x;
+  const cy2=y1+dy*tension.c2y;
+  const mt=1-t;
+  return{
+    x:mt*mt*mt*x1+3*mt*mt*t*cx1+3*mt*t*t*cx2+t*t*t*x2,
+    y:mt*mt*mt*y1+3*mt*mt*t*cy1+3*mt*t*t*cy2+t*t*t*y2
+  };
+}
+
+function bezPt(x1,y1,x2,y2,t){
+  return bezPtCustom(x1,y1,x2,y2,{c1x:0.4,c1y:0,c2x:0.6,c2y:0},t);
+}
+
+// Draw a single bezier path with custom tension
+function drawBezPath(x1,y1,x2,y2,tension){
+  const dx=x2-x1,dy=y2-y1;
+  const cx1=x1+dx*tension.c1x;
+  const cy1=y1+dy*tension.c1y;
+  const cx2=x1+dx*tension.c2x;
+  const cy2=y1+dy*tension.c2y;
+  ctx.beginPath();ctx.moveTo(x1,y1);
+  ctx.bezierCurveTo(cx1,cy1,cx2,cy2,x2,y2);
+}
+
+// Telemetry flicker state
+let telemFlicker=Array.from({length:8},()=>({v:Math.random(),t:Math.random()*6.28,speed:0.02+Math.random()*0.03}));
+let ambientPhase=0;
+
+function drawAtmosphere(ts){
+  // LAYER 1 — subtle noise grid (very low opacity)
+  ctx.save();
+  ctx.globalAlpha=0.025;
+  ctx.strokeStyle='#ffffff';ctx.lineWidth=0.5;
+  const gs=52;
+  for(let x=0;x<GW;x+=gs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,GH);ctx.stroke();}
+  for(let y=0;y<GH;y+=gs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(GW,y);ctx.stroke();}
+  ctx.restore();
+
+  // Scanline texture
+  ctx.save();
+  ctx.globalAlpha=0.018;
+  for(let y=0;y<GH;y+=3){
+    ctx.fillStyle=y%6===0?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.1)';
+    ctx.fillRect(0,y,GW,1);
+  }
+  ctx.restore();
+
+  // Faint center computational glow
+  const cx=GW/2,cy=GH/2;
+  const glowPulse=0.03+0.01*Math.sin(ts*0.0007+ambientPhase);
+  ctx.save();
+  const grd=ctx.createRadialGradient(cx,cy,0,cx,cy,GW*0.45);
+  grd.addColorStop(0,`rgba(255,90,0,${glowPulse})`);
+  grd.addColorStop(0.5,`rgba(255,107,0,${glowPulse*0.3})`);
+  grd.addColorStop(1,'rgba(255,107,0,0)');
+  ctx.fillStyle=grd;ctx.fillRect(0,0,GW,GH);
+  ctx.restore();
+
+  // Telemetry flicker — faint horizontal data traces
+  telemFlicker.forEach(f=>{
+    f.t+=f.speed;f.v=0.5+0.5*Math.sin(f.t);
+  });
+  ambientPhase+=0.0004;
+}
+
+function drawDormantTopology(){
+  // Ghost infrastructure lines — very faint inactive potential routes
+  const dormantOpacity=0.04;
+  ctx.save();
+  ctx.globalAlpha=dormantOpacity;
+  ctx.strokeStyle='#ffffff';ctx.lineWidth=0.5;ctx.setLineDash([2,14]);
+  AGENTS.forEach(a=>{
+    CNODES.forEach((c,ci)=>{
+      // Only draw a subset for density without clutter
+      if((AGENTS.indexOf(a)+ci)%3!==0)return;
+      const x1=a.x+62,y1=a.y,x2=c.x-54,y2=c.y;
+      ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    });
+  });
+  ctx.setLineDash([]);ctx.restore();
+}
+
+function drawGraph(ts){
+  ctx.clearRect(0,0,GW,GH);
+
+  drawAtmosphere(ts);
+  drawDormantTopology();
+
+  // LAYER 2 — dormant vertical separator
+  ctx.save();
+  ctx.globalAlpha=0.06;
+  ctx.strokeStyle='#ffffff';ctx.lineWidth=1;ctx.setLineDash([1,16]);
+  ctx.beginPath();ctx.moveTo(GW/2,12);ctx.lineTo(GW/2,GH-12);ctx.stroke();
+  ctx.setLineDash([]);ctx.restore();
+
+  // LAYER 4 — ACTIVE EDGES
+  edges.forEach((e,ei)=>{
+    const ag=AGENTS.find(a=>a.id===e.agentId),cp=CNODES.find(c=>c.id===e.capId);
+    if(!ag||!cp)return;
+    const x1=ag.x+62,y1=ag.y,x2=cp.x-54,y2=cp.y;
+    const tension=ROUTE_TENSION[ei%ROUTE_TENSION.length];
+    const isH=hoveredEdge===e;
+    const isAgH=hoveredAgent===e.agentId;
+    const isCapH=hoveredCap===e.capId;
+    const isHighlit=isH||isAgH||isCapH;
+
+    ctx.save();
+    if(isHighlit){
+      // Glow layer
+      ctx.globalAlpha=0.12;
+      ctx.strokeStyle='#FF6B00';ctx.lineWidth=8;ctx.filter='blur(4px)';
+      drawBezPath(x1,y1,x2,y2,tension);ctx.stroke();
+      ctx.filter='none';
+      ctx.globalAlpha=0.7;
+      ctx.strokeStyle='rgba(255,107,0,0.8)';ctx.lineWidth=1.5;
+      drawBezPath(x1,y1,x2,y2,tension);ctx.stroke();
+    } else {
+      // Dormant active route — dashed, dim orange
+      ctx.globalAlpha=0.22;
+      ctx.strokeStyle='rgba(255,107,0,0.6)';ctx.lineWidth=0.75;ctx.setLineDash([2,9]);
+      drawBezPath(x1,y1,x2,y2,tension);ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    ctx.restore();
+  });
+
+  // PARTICLES — directional packet traversal
+  particles.forEach(p=>{
+    const ag=AGENTS.find(a=>a.id===p.agentId),cp=CNODES.find(c=>c.id===p.capId);
+    if(!ag||!cp)return;
+    const tension=ROUTE_TENSION[p.routeIdx%ROUTE_TENSION.length];
+    const x1=ag.x+62,y1=ag.y,x2=cp.x-54,y2=cp.y;
+    const pt=bezPtCustom(x1,y1,x2,y2,tension,p.t);
+    const ahead=bezPtCustom(x1,y1,x2,y2,tension,Math.min(p.t+0.015,1));
+    
+    // Velocity-based glow trail
+    const spd=Math.hypot(ahead.x-pt.x,ahead.y-pt.y);
+    const trailLen=3;
+    ctx.save();
+    for(let i=trailLen;i>=0;i--){
+      const tr=Math.max(0,p.t-i*0.018);
+      const tpt=bezPtCustom(x1,y1,x2,y2,tension,tr);
+      const ta=((trailLen-i)/trailLen)*p.alpha*(0.5+0.5*Math.sin(ts*0.004+p.phase));
+      ctx.globalAlpha=ta*0.4;
+      ctx.fillStyle='#FF6B00';
+      ctx.beginPath();ctx.arc(tpt.x,tpt.y,p.size*0.6,0,Math.PI*2);ctx.fill();
+    }
+    // Head particle
+    ctx.globalAlpha=p.alpha*(0.7+0.3*Math.sin(ts*0.005+p.phase));
+    ctx.fillStyle='#FF8C35';
+    ctx.beginPath();ctx.arc(pt.x,pt.y,p.size,0,Math.PI*2);ctx.fill();
+    // Micro glow
+    ctx.globalAlpha=p.alpha*0.15;
+    ctx.fillStyle='#FF6B00';
+    ctx.beginPath();ctx.arc(pt.x,pt.y,p.size*3,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  });
+
+  // LAYER 3 — AGENT NODES: infrastructural module language
+  AGENTS.forEach(a=>{
+    const sys=SYSTEM_COLORS[a.id]||SYSTEM_COLORS.blackbox;
+    const bw=128,bh=64,bx=a.x-bw/2,by=a.y-bh/2;
+    const sigPulse=a.active?Math.sin(ts*0.0038+a.phase):0;
+    const isH=hoveredAgent===a.id;
+    const dimmed=hoveredAgent!==null&&!isH&&edges.length>0;
+    const baseAlpha=dimmed?0.14:(a.active?1:0.35);
+
+    ctx.save();
+    ctx.globalAlpha=baseAlpha;
+
+    // Tight edge signal glow — NOT soft bloom, just a hard luminance rim
+    if(a.active){
+      ctx.save();
+      ctx.globalAlpha=(dimmed?0.03:0.07)+0.03*sigPulse;
+      ctx.strokeStyle=sys.base;ctx.lineWidth=3;ctx.filter='blur(2px)';
+      rrect(ctx,bx,by,bw,bh,2);ctx.stroke();
+      ctx.filter='none';ctx.restore();
+    }
+
+    // Module body — near-black, embedded, NOT glassy
+    rrect(ctx,bx,by,bw,bh,2);
+    ctx.fillStyle=a.active?'rgba(14,11,8,0.97)':'rgba(10,8,6,0.94)';
+    ctx.fill();
+
+    // Left-edge illumination strip — directional, asymmetric
+    if(a.active){
+      const edgeAlpha=0.55+0.2*sigPulse;
+      // Extract RGB from sys.base string for gradient
+      const sysRGB=a.id==='claude'?'240,230,210':a.id==='codex'?'130,155,185':a.id==='gemini'?'90,170,175':'210,130,40';
+      const lg=ctx.createLinearGradient(bx,by,bx,by+bh);
+      lg.addColorStop(0,`rgba(${sysRGB},${edgeAlpha})`);
+      lg.addColorStop(0.4,`rgba(${sysRGB},${edgeAlpha*0.5})`);
+      lg.addColorStop(1,`rgba(${sysRGB},0.05)`);
+      ctx.fillStyle=lg;
+      ctx.fillRect(bx,by,1.5,bh);
+      // Top-left corner accent — tiny illuminated junction
+      ctx.fillStyle=`rgba(${sysRGB},${edgeAlpha})`;
+      ctx.fillRect(bx,by,8,1);
+    }
+
+    // Outer border — asymmetric brightness (brighter left+top, dim right+bottom)
+    if(a.active){
+      const sysRGB=a.id==='claude'?'240,230,210':a.id==='codex'?'130,155,185':a.id==='gemini'?'90,170,175':'210,130,40';
+      // Top edge
+      ctx.fillStyle=`rgba(${sysRGB},0.28)`;ctx.fillRect(bx,by,bw,0.5);
+      // Left edge  
+      ctx.fillStyle=`rgba(${sysRGB},0.18)`;ctx.fillRect(bx,by,0.5,bh);
+      // Right + bottom — near invisible
+      ctx.fillStyle=`rgba(${sysRGB},0.06)`;
+      ctx.fillRect(bx+bw-0.5,by,0.5,bh);ctx.fillRect(bx,by+bh-0.5,bw,0.5);
+    } else {
+      // Inactive — near-invisible border
+      rrect(ctx,bx,by,bw,bh,2);
+      ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=0.5;ctx.stroke();
+    }
+
+    // Interrupted border segment (right side) — infrastructural detail
+    if(a.active){
+      const sysRGB=a.id==='claude'?'240,230,210':a.id==='codex'?'130,155,185':a.id==='gemini'?'90,170,175':'210,130,40';
+      ctx.strokeStyle=`rgba(${sysRGB},0.15)`;ctx.lineWidth=0.5;
+      ctx.setLineDash([3,6]);
+      ctx.beginPath();ctx.moveTo(bx+bw,by+8);ctx.lineTo(bx+bw,by+bh-8);ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Status LED — top-right, hardware signal diode feel
+    const ledAlpha=a.active?(0.85+0.15*Math.sin(ts*0.008+a.phase*1.4)):0.15;
+    ctx.fillStyle=a.active?(a.id==='blackbox'?'#FF6B00':'rgba(34,197,94,0.9)'):'#1a1a1a';
+    ctx.globalAlpha=ledAlpha*(dimmed?0.3:1);
+    ctx.beginPath();ctx.arc(bx+bw-8,by+8,2,0,Math.PI*2);ctx.fill();
+    // LED halo — tight, 1px
+    if(a.active){
+      ctx.globalAlpha=0.2*(dimmed?0.3:1);
+      ctx.fillStyle=a.id==='blackbox'?'#FF6B00':'#22c55e';
+      ctx.beginPath();ctx.arc(bx+bw-8,by+8,4,0,Math.PI*2);ctx.fill();
+    }
+
+    // Tiny corner hash — infrastructural system ID detail
+    ctx.globalAlpha=(a.active?0.25:0.08)*(dimmed?0.4:1);
+    ctx.font=`400 6px 'JetBrains Mono',monospace`;ctx.textAlign='left';ctx.textBaseline='top';
+    ctx.fillStyle='rgba(255,255,255,0.5)';
+    const hashId={claude:'CC-01',codex:'CX-02',gemini:'GM-03',blackbox:'BB-04'}[a.id];
+    ctx.fillText(hashId,bx+4,by+3);
+
+    ctx.restore();
+
+    // ── Typography — left-aligned, utilitarian, operational ──
+    ctx.save();
+    ctx.globalAlpha=(dimmed?0.2:1)*(a.active?1:0.5);
+
+    // AGENT_ID label — left-aligned, compressed
+    ctx.font=`400 7px 'JetBrains Mono',monospace`;ctx.textAlign='left';ctx.textBaseline='top';
+    ctx.fillStyle='rgba(255,255,255,0.2)';
+    ctx.fillText('AGENT_ID',bx+8,by+14);
+
+    // System name — left-aligned, primary label
+    ctx.font=`700 9px 'JetBrains Mono',monospace`;ctx.textBaseline='top';
+    const sysRGBt=a.id==='claude'?'240,230,210':a.id==='codex'?'130,155,185':a.id==='gemini'?'90,170,175':'210,130,40';
+    ctx.fillStyle=a.active?`rgba(${sysRGBt},0.92)`:'rgba(255,255,255,0.35)';
+    ctx.fillText(a.label,bx+8,by+23);
+
+    // Route count row — bottom metadata
+    const routeCount=a.caps.length;
+    const routeLabel=routeCount>0?`ROUTES: ${String(routeCount).padStart(2,'0')}`:'ROUTES: --';
+    ctx.font=`500 7px 'JetBrains Mono',monospace`;ctx.textBaseline='bottom';
+    ctx.fillStyle=routeCount>0?'rgba(255,107,0,0.75)':'rgba(255,255,255,0.15)';
+    ctx.fillText(routeLabel,bx+8,by+bh-5);
+
+    // State tag — right-aligned bottom
+    ctx.textAlign='right';
+    ctx.fillStyle=a.active?'rgba(34,197,94,0.55)':'rgba(255,255,255,0.1)';
+    ctx.fillText(a.active?'ACTIVE':'STANDBY',bx+bw-6,by+bh-5);
+
+    ctx.restore();
+  });
+
+  // LAYER 3 — CAP NODES: infrastructure module capsules
+  CNODES.forEach((c,ci)=>{
+    if(!visibleCaps.has(c.id))return;
+    const cw=112,ch=40,cx2=c.x-cw/2,cy2=c.y-ch/2;
+    const isH=hoveredCap===c.id;
+    const dimmed=hoveredAgent!==null&&!edges.some(e=>e.capId===c.id&&e.agentId===hoveredAgent);
+    const hasDimAgent=hoveredAgent!==null;
+    const baseAlpha=hasDimAgent?(dimmed?0.15:1):(c.assigned?1:0.5);
+
+    ctx.save();
+    ctx.globalAlpha=baseAlpha;
+
+    // Tight edge signal — assigned caps only, no soft bloom
+    if(c.assigned&&isH){
+      ctx.save();ctx.globalAlpha=0.3;
+      ctx.strokeStyle='rgba(255,107,0,0.9)';ctx.lineWidth=1;ctx.filter='blur(1px)';
+      rrect(ctx,cx2-1,cy2-1,cw+2,ch+2,2);ctx.stroke();
+      ctx.filter='none';ctx.restore();
+    }
+
+    // Module body — near-black embedded surface
+    rrect(ctx,cx2,cy2,cw,ch,1);
+    ctx.fillStyle=c.assigned?'rgba(12,9,6,0.98)':'rgba(9,7,5,0.95)';
+    ctx.fill();
+
+    // Left status strip — directional signal indicator
+    const stripAlpha=c.assigned?0.7:0.08;
+    const stripLg=ctx.createLinearGradient(cx2,cy2,cx2,cy2+ch);
+    stripLg.addColorStop(0,c.assigned?`rgba(255,107,0,${stripAlpha})`:'rgba(255,255,255,0.06)');
+    stripLg.addColorStop(1,c.assigned?'rgba(255,107,0,0.1)':'rgba(255,255,255,0.01)');
+    ctx.fillStyle=stripLg;
+    ctx.fillRect(cx2,cy2,2,ch);
+
+    // Borders — asymmetric, directional
+    if(c.assigned){
+      ctx.fillStyle='rgba(255,107,0,0.22)';ctx.fillRect(cx2,cy2,cw,0.5); // top
+      ctx.fillStyle='rgba(255,107,0,0.1)';ctx.fillRect(cx2,cy2,0.5,ch);  // left
+      ctx.fillStyle='rgba(255,107,0,0.04)';
+      ctx.fillRect(cx2+cw-0.5,cy2,0.5,ch);ctx.fillRect(cx2,cy2+ch-0.5,cw,0.5);
+    } else {
+      rrect(ctx,cx2,cy2,cw,ch,1);
+      ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=0.5;ctx.stroke();
+    }
+
+    // Interrupted right-edge segment
+    if(c.assigned){
+      ctx.strokeStyle='rgba(255,107,0,0.12)';ctx.lineWidth=0.5;ctx.setLineDash([2,5]);
+      ctx.beginPath();ctx.moveTo(cx2+cw,cy2+6);ctx.lineTo(cx2+cw,cy2+ch-6);ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    ctx.restore();
+
+    // Labels — left-aligned utilitarian stack
+    ctx.save();
+    ctx.globalAlpha=baseAlpha;
+
+    // Service type micro-label
+    const svcType={ws:'STREAM',rbac:'ACCESS',persist:'STORAGE',audit:'LOG',notif:'NOTIFY',integ:'BRIDGE'}[c.id]||'SVC';
+    ctx.font=`400 6px 'JetBrains Mono',monospace`;ctx.textAlign='left';ctx.textBaseline='top';
+    ctx.fillStyle=c.assigned?'rgba(255,107,0,0.4)':'rgba(255,255,255,0.12)';
+    ctx.fillText(svcType,cx2+7,cy2+4);
+
+    // Primary label — left-aligned, main identifier
+    ctx.font=`600 8.5px 'JetBrains Mono',monospace`;ctx.textBaseline='middle';
+    ctx.fillStyle=c.assigned?'rgba(255,255,255,0.88)':'rgba(255,255,255,0.28)';
+    ctx.fillText(c.label,cx2+7,cy2+ch/2+2);
+
+    // Status pip — right side, hardware LED
+    const pipAlpha=c.assigned?(0.8+0.2*Math.sin(ts*0.006+ci)):0.12;
+    ctx.globalAlpha=baseAlpha*pipAlpha;
+    ctx.fillStyle=c.assigned?'#FF6B00':'#222';
+    ctx.beginPath();ctx.arc(cx2+cw-8,cy2+ch/2,2,0,Math.PI*2);ctx.fill();
+    if(c.assigned){
+      ctx.globalAlpha=baseAlpha*0.18;ctx.fillStyle='#FF6B00';
+      ctx.beginPath();ctx.arc(cx2+cw-8,cy2+ch/2,4,0,Math.PI*2);ctx.fill();
+    }
+
+    ctx.restore();
+  });
+
+  // LAYER 5 — TELEMETRY OVERLAYS when hovering an agent
+  if(hoveredAgent){
+    const ag=AGENTS.find(a=>a.id===hoveredAgent);
+    if(ag&&ag.active){
+      const bx2=ag.x-60,by2=ag.y+34;
+      ctx.save();
+      ctx.globalAlpha=0.72;
+      ctx.fillStyle=ag.id==='blackbox'?'rgba(255,100,0,0.08)':'rgba(255,255,255,0.04)';
+      rrect(ctx,bx2,by2,120,36,2);ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=0.5;ctx.stroke();
+      ctx.font=`400 7px 'JetBrains Mono',monospace`;ctx.textAlign='left';ctx.fillStyle='rgba(255,255,255,0.3)';
+      ctx.fillText('RT LATENCY',bx2+6,by2+11);
+      ctx.fillText('SIGNAL HLTH',bx2+6,by2+23);
+      ctx.textAlign='right';ctx.fillStyle='rgba(255,140,53,0.8)';
+      ctx.fillText(Math.round(4+telemFlicker[0].v*12)+'ms',bx2+114,by2+11);
+      ctx.fillStyle='rgba(100,200,100,0.7)';
+      ctx.fillText(Math.round(94+telemFlicker[1].v*5)+'%',bx2+114,by2+23);
+      ctx.restore();
+    }
+  }
+
+  // Corner telemetry labels on canvas
+  ctx.save();
+  ctx.font=`400 7px 'JetBrains Mono',monospace`;ctx.fillStyle='rgba(255,255,255,0.12)';
+  ctx.textAlign='left';ctx.fillText('ACTIVE ROUTES: '+edges.length,10,GH-10);
+  ctx.textAlign='right';
+  const activeAgents=AGENTS.filter(a=>a.active).length;
+  ctx.fillText('AGENTS ONLINE: '+activeAgents+'/'+AGENTS.length,GW-10,GH-10);
+  ctx.restore();
+}
+
+function loop(ts){
+  particles.forEach(p=>{
+    // Slightly variable speed — acceleration on curves
+    p.t+=p.speed*(1+0.15*Math.sin(p.t*Math.PI*2));
+    if(p.t>=1)p.t=0;
+  });
+  drawGraph(ts);rafId=requestAnimationFrame(loop);
+}
+
+// Mouse — hover diagnostics
+gc.addEventListener('mousemove',e=>{
+  const r=gc.getBoundingClientRect();
+  const scx=GW/r.width,scy=GH/r.height;
+  const mx=(e.clientX-r.left)*scx,my=(e.clientY-r.top)*scy;
+  let foundEdge=null,foundAgent=null,foundCap=null;
+
+  // Check agents
+  AGENTS.forEach(a=>{
+    if(Math.abs(mx-a.x)<62&&Math.abs(my-a.y)<28)foundAgent=a.id;
+  });
+  // Check caps
+  CNODES.forEach(c=>{
+    if(Math.abs(mx-c.x)<50&&Math.abs(my-c.y)<14)foundCap=c.id;
+  });
+  // Check edges
+  edges.forEach((edge,ei)=>{
+    const ag=AGENTS.find(a=>a.id===edge.agentId),cp=CNODES.find(c=>c.id===edge.capId);
+    if(!ag||!cp)return;
+    const x1=ag.x+62,y1=ag.y,x2=cp.x-54,y2=cp.y;
+    const tension=ROUTE_TENSION[ei%ROUTE_TENSION.length];
+    for(let s=0;s<=1;s+=0.03){
+      const p=bezPtCustom(x1,y1,x2,y2,tension,s);
+      if(Math.abs(mx-p.x)<9&&Math.abs(my-p.y)<9){foundEdge=edge;break;}
+    }
+  });
+
+  hoveredEdge=foundEdge;hoveredAgent=foundAgent||null;hoveredCap=foundCap||null;
+
+  const tip=document.getElementById('tooltip');
+  const show=foundEdge||foundAgent||foundCap;
+  if(foundEdge){
+    document.getElementById('tipLabel').textContent=foundEdge.label;
+    document.getElementById('tipReason').textContent=foundEdge.why;
+    tip.style.opacity='1';
+    tip.style.left=(e.clientX+16)+'px';tip.style.top=(e.clientY-40)+'px';
+  } else if(foundAgent){
+    const ag=AGENTS.find(a=>a.id===foundAgent);
+    if(ag){
+      document.getElementById('tipLabel').textContent=ag.label;
+      document.getElementById('tipReason').textContent=ag.active?ag.sub+' — '+ag.caps.length+' route'+(ag.caps.length!==1?'s':'')+' assigned.':ag.sub+' — awaiting assignment.';
+      tip.style.opacity='1';
+      tip.style.left=(e.clientX+16)+'px';tip.style.top=(e.clientY-40)+'px';
+    }
+  } else if(foundCap){
+    const cp=CNODES.find(c=>c.id===foundCap);
+    if(cp){
+      document.getElementById('tipLabel').textContent=cp.label;
+      const assignedAgent=edges.find(e=>e.capId===cp.id);document.getElementById('tipReason').textContent=assignedAgent?'Routed to '+AGENTS.find(a=>a.id===assignedAgent.agentId)?.label+'.':'Pending orchestration.';
+      tip.style.opacity='1';
+      tip.style.left=(e.clientX+16)+'px';tip.style.top=(e.clientY-40)+'px';
+    }
+  } else {
+    tip.style.opacity='0';
+  }
+});
+gc.addEventListener('mouseleave',()=>{
+  hoveredEdge=null;hoveredAgent=null;hoveredCap=null;
+  document.getElementById('tooltip').style.opacity='0';
+});
+
+// ── HELPERS ──────────────────────────────────────────────────
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function setStatus(txt,pulsing=true){
+  const row=document.getElementById('statusRow');
+  row.classList.add('show');
+  document.getElementById('statusDot').className='status-dot'+(pulsing?' pulse':'');
+  document.getElementById('statusText').textContent=txt;
+}
+
+// ── MAIN ─────────────────────────────────────────────────────
+async function runAnalysis(){
+  const btn=document.getElementById('analyzeBtn');
+  btn.disabled=true;
+  btn.innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 8"/></svg> ANALYZING...';
+
+  // Reset
+  AGENTS.forEach(a=>{a.active=false;a.caps=[];});
+  CNODES.forEach(c=>{c.assigned=false;});
+  edges=[];particles=[];visibleCaps.clear();
+  document.getElementById('execPanel').classList.remove('show');
+  document.getElementById('execItems').innerHTML='';
+  document.querySelectorAll('.cta-btn').forEach(b=>b.remove());
+  document.getElementById('capGrid').innerHTML='';
+  document.getElementById('capSection').style.display='none';
+  document.getElementById('graphSection').style.display='none';
+
+  setStatus('PARSING SYSTEM INTENT...');
+  await sleep(700);
+  setStatus('EXTRACTING CAPABILITY SIGNATURES...');
+
+  // Cap cards
+  document.getElementById('capSection').style.display='block';
+  const grid=document.getElementById('capGrid');
+  CAPS.forEach((c,i)=>{
+    const card=document.createElement('div');
+    card.className='cap-card';
+    card.innerHTML=`<div class="cap-top"><span class="cap-num">${c.num}</span><span class="cap-name">${c.name}</span><span class="cap-pct">${c.pct}%</span></div><div class="meter-track"><div class="meter-fill" data-pct="${c.pct}"></div></div>`;
+    grid.appendChild(card);
+    setTimeout(()=>{card.classList.add('show');setTimeout(()=>{card.querySelector('.meter-fill').style.width=c.pct+'%';},150);},i*150+200);
+  });
+
+  await sleep(1100);
+  setStatus('RESOLVING AGENT TOPOLOGY...');
+
+  // Graph
+  document.getElementById('graphSection').style.display='block';
+  layoutGraph();
+  if(rafId)cancelAnimationFrame(rafId);
+  rafId=requestAnimationFrame(loop);
+
+  await sleep(500);
+
+  // Route
+  for(let i=0;i<ROUTES.length;i++){
+    const route=ROUTES[i];
+    const ag=AGENTS.find(a=>a.id===route.agentId),cp=CNODES.find(c=>c.id===route.capId);
+    if(!ag||!cp)continue;
+    await sleep(480);
+    ag.active=true;cp.assigned=true;ag.caps.push(route.capId);visibleCaps.add(route.capId);
+    edges.push(route);
+    for(let p=0;p<5;p++){
+      particles.push({agentId:route.agentId,capId:route.capId,routeIdx:i,t:p/5,speed:0.004+Math.random()*0.003,size:1.6+Math.random()*1,alpha:0.75+Math.random()*0.25,phase:Math.random()*6.28});
+    }
+    setStatus('ROUTING '+cp.label+' → '+ag.label+'...');
+  }
+
+  await sleep(700);
+  setStatus('EXECUTION PLAN READY',false);
+
+  // Exec panel
+  const panel=document.getElementById('execPanel');
+  const itemsCt=document.getElementById('execItems');
+  panel.classList.add('show');
+  for(let i=0;i<EXEC_ITEMS.length;i++){
+    const row=document.createElement('div');
+    row.className='exec-row';
+    row.innerHTML=`<span class="exec-check" style="color:#22c55e;font-size:13px">✓</span><span class="exec-text">${EXEC_ITEMS[i].toUpperCase()}</span>`;
+    itemsCt.appendChild(row);
+    await sleep(260);row.classList.add('show');
+  }
+
+  // CTA
+  await sleep(200);
+  const ctaGrid=document.getElementById('ctaGrid');
+  CTAS.forEach((c,i)=>{
+    const b=document.createElement('button');
+    b.className='cta-btn'+(c.primary?' primary':'');
+    b.innerHTML=`<span style="font-size:14px;opacity:0.8">${c.icon}</span><span>${c.label}</span>`;
+    ctaGrid.appendChild(b);
+    setTimeout(()=>b.classList.add('show'),i*90);
+  });
+
+  btn.disabled=false;
+  btn.innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Re-Analyze';
+}
+
+window.addEventListener('resize',()=>{
+  if(document.getElementById('graphSection').style.display!=='none')layoutGraph();
+});
+
+// ── BLACKBOX BUTTON SCRAMBLE SYSTEM ─────────────────────────
+// Characters pulled from infrastructure/terminal charset — not random chaos
+const BB_CHARS='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.:/#@>|';
+const BB_SAFE ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // chars that keep reading stable
+
+function bbScramble(el,opts={}){
+  const {
+    duration   = 260,    // total ms
+    intensity  = 0.35,   // fraction of chars scrambled at peak
+    holdMs     = 60,     // ms to hold scrambled state before resolving
+    charSet    = BB_CHARS
+  } = opts;
+
+  // Find the text node we should scramble — skip SVG children
+  let textSpan = el.querySelector('span:last-child')||el;
+  // If the element itself is the text container (analyze-btn has no spans)
+  const original = textSpan.textContent.trim();
+  if(!original||el._scrambling)return;
+  el._scrambling=true;
+
+  const totalChars = original.length;
+  const startTime  = performance.now();
+  const peakTime   = duration*0.35;    // scramble peaks at 35% through
+  const holdEnd    = peakTime+holdMs;
+  const resolveEnd = duration;
+
+  function frame(now){
+    const elapsed = now - startTime;
+    let progress; // 0=clean, 1=full scramble
+    if(elapsed<peakTime){
+      progress = elapsed/peakTime;           // ramp up
+    } else if(elapsed<holdEnd){
+      progress = 1;                          // hold
+    } else {
+      progress = 1 - (elapsed-holdEnd)/(resolveEnd-holdEnd); // resolve
+      if(progress<0)progress=0;
+    }
+
+    const scrambleCount = Math.round(totalChars*intensity*progress);
+    // Pick which indices to scramble — prefer middle chars, leave edges readable
+    const indices=new Set();
+    let attempts=0;
+    while(indices.size<scrambleCount&&attempts<totalChars*3){
+      // bias toward center
+      const i=Math.floor(Math.random()*totalChars);
+      if(original[i]!==' ')indices.add(i);
+      attempts++;
+    }
+
+    let out='';
+    for(let i=0;i<totalChars;i++){
+      if(original[i]===' '){out+=' ';continue;}
+      if(indices.has(i)){
+        out+=charSet[Math.floor(Math.random()*charSet.length)];
+      } else {
+        out+=original[i];
+      }
+    }
+    textSpan.textContent=out;
+
+    if(elapsed<resolveEnd){
+      requestAnimationFrame(frame);
+    } else {
+      textSpan.textContent=original;
+      el._scrambling=false;
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+function bbAddScramble(selector,opts={}){
+  document.querySelectorAll(selector).forEach(el=>{
+    el.addEventListener('mouseenter',()=>bbScramble(el,opts));
+  });
+}
+
+// Apply to analyze button
+(function initScramble(){
+  const analyzeBtn=document.getElementById('analyzeBtn');
+  if(analyzeBtn){
+    analyzeBtn.addEventListener('mouseenter',()=>{
+      // For analyze btn, scramble only if not disabled/analyzing
+      if(!analyzeBtn.disabled)bbScramble(analyzeBtn,{duration:220,intensity:0.3});
+    });
+  }
+
+  // Apply to CTA buttons as they are created — use MutationObserver
+  const ctaGrid=document.getElementById('ctaGrid');
+  if(ctaGrid){
+    const obs=new MutationObserver(mutations=>{
+      mutations.forEach(m=>{
+        m.addedNodes.forEach(node=>{
+          if(node.nodeType===1&&node.classList.contains('cta-btn')){
+            node.addEventListener('mouseenter',()=>bbScramble(node,{duration:200,intensity:0.28}));
+          }
+        });
+      });
+    });
+    obs.observe(ctaGrid,{childList:true});
+  }
+})();
+
+
+// ── BLACKBOX BUTTON SCRAMBLE SYSTEM ─────────────────────────
+const SCRAMBLE_CHARS='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*-_+=';
+const SCRAMBLE_PRESERVE=[' ','/','→','↗','↓','⌨'];
+
+function scrambleText(el,originalText,duration=280){
+  // Don't scramble icons (SVG children) — only text nodes
+  // Find the text span or use the element itself
+  const target=el.querySelector('span:last-child')||el;
+  if(!originalText)originalText=target.textContent;
+  
+  let startTime=null;
+  const totalFrames=Math.floor(duration/16);
+  const stabilizeStart=0.55; // start resolving at 55% through
+  
+  function frame(ts){
+    if(!startTime)startTime=ts;
+    const progress=Math.min((ts-startTime)/duration,1);
+    const resolveProgress=progress<stabilizeStart?0:(progress-stabilizeStart)/(1-stabilizeStart);
+    
+    let result='';
+    for(let i=0;i<originalText.length;i++){
+      const char=originalText[i];
+      if(SCRAMBLE_PRESERVE.includes(char)){result+=char;continue;}
+      if(resolveProgress>=(i/originalText.length)){
+        result+=originalText[i];
+      } else {
+        // scramble intensity: high early, fades as we resolve
+        const scrambleChance=1-resolveProgress*0.7;
+        if(Math.random()<scrambleChance*0.7){
+          result+=SCRAMBLE_CHARS[Math.floor(Math.random()*SCRAMBLE_CHARS.length)];
+        } else {
+          result+=originalText[i];
+        }
+      }
+    }
+    
+    target.textContent=result;
+    if(progress<1)requestAnimationFrame(frame);
+    else target.textContent=originalText;
+  }
+  requestAnimationFrame(frame);
+}
+
+function attachScramble(el){
+  // Store original text from the last text span (avoids SVG)
+  const textSpan=el.querySelector('span:last-child');
+  const original=textSpan?textSpan.textContent:el.childNodes[el.childNodes.length-1]?.textContent?.trim();
+  if(!original)return;
+  
+  let active=false;
+  el.addEventListener('mouseenter',()=>{
+    if(active)return;
+    active=true;
+    scrambleText(el,original,260);
+    setTimeout(()=>{active=false;},320);
+  });
+}
+
+// Attach to analyze button immediately
+(function(){
+  const ab=document.getElementById('analyzeBtn');
+  if(ab)attachScramble(ab);
+})();
+
+// Observer for dynamically added CTA buttons
+const btnObserver=new MutationObserver(muts=>{
+  muts.forEach(m=>{
+    m.addedNodes.forEach(n=>{
+      if(n.nodeType===1&&n.classList&&n.classList.contains('cta-btn'))attachScramble(n);
+    });
+  });
+});
+btnObserver.observe(document.getElementById('ctaGrid'),{childList:true});
+
+</script>
