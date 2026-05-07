@@ -90,9 +90,8 @@ We’ll build a production-grade feature, not a toy.
   - audit logging of actions
   ~~~
 
-
-![Video Title](assets/Area.mp4)
-
+Vid 1.
+https://drive.google.com/file/d/12j1reTX6QBJPHvysMKHM8naC6MYkARgy/view?usp=sharing
 
 ## What the CLI does immediately
 From Intent → Routing → Execution
